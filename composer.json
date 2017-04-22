@@ -16,5 +16,6 @@
         "psr-4": {
             "Tamizh\\LaravelEs\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "stable"
 }
