@@ -1,0 +1,265 @@
+<?php
+namespace Tamizh\Phpes;
+
+use Tamizh\Phpes\Traits\ElasticQueryTrait;
+use Illuminate\Support\Collection;
+
+/**
+* Convert Elasticsearch model object query array
+*/
+class QueryBuilder
+{
+    use ElasticQueryTrait;
+    /**
+     * Formed query using elasticsearch model
+     * @var array
+     */
+    protected $query;
+
+    /**
+     * Model that need to be converted as query array
+     * @var Tamizh\phpes\Elasticsearch
+     */
+    protected $model;
+
+    /**
+     * Elasticsearch client object
+     * @var Elasticsearch\ClientBuilder
+     */
+    protected $client;
+
+    /**
+     * The main query part in the query array
+     * @var array
+     */
+    protected $internal_query;
+
+    /**
+     * The must constraints of the bool query
+     * @var array
+     */
+    protected $musts;
+
+    /**
+     * The must not constraint of the bool query
+     * @var array
+     */
+    protected $must_nots;
+
+    /**
+     * The should constraints of the bool query
+     * @var array
+     */
+    protected $shoulds;
+
+    /**
+     * The should not constraints of the bool query
+     * @var array
+     */
+    protected $should_nots;
+
+    /**
+     * The match constraint of the query
+     * @var array
+     */
+    public $constraints = array();
+
+    /**
+     * The aggregations of the query
+     * @var array
+     */
+    protected $aggs;
+
+    /**
+     * The sort constraint of the query
+     * @var array
+     */
+    protected $sort;
+
+    /**
+     * Bools array for the query builder
+     * @var array
+     */
+    public $bools = [];
+
+    /**
+     * Script array for the query builder
+     * @var array
+     */
+    protected $script;
+
+    /**
+     * Limit to clear the scroll memory
+     * @var string
+     */
+    protected $scroll_param;
+
+    /**
+     * Result of the current buider
+     * @var array
+     */
+    protected $result;
+
+    /**
+     * Collection result of the builder
+     * @var Illuminate\Support\Collection
+     */
+    protected $collection;
+
+    /**
+     * Initialize the query builder
+     * @param Tamizh\Phpes\Elasticsearch  $model  Elasticsearch Model
+     */
+    public function __construct($client)
+    {
+        $this->client = $client;
+        $this->query['body'] = [
+            'query' => []
+        ];
+    }
+
+    /**
+     * Compile Constrint clause for match
+     * @param  Tamizh\Phpes\ConstraintClause $constraint
+     * @return constraint array
+     */
+    public function compileMatch($constraint)
+    {
+        $condition = array();
+        $condition[$constraint->field] = $constraint->condition;
+        return $condition;
+    }
+
+    /**
+     * Compile terms constraint clause
+     * @param  Tamizh\Phpes\ConstraintClause  $constraint  Constraint Clause
+     * @return  array  condition array
+     */
+    public function compileTerms($constraint)
+    {
+        $condition = array();
+        $condition[$constraint->field] = $constraint->condition;
+        return $condition;
+    }
+
+
+    /**
+     * Form and return the query from elasticsearch model
+     * @return array  Elasticsearch query array
+     */
+    public function get()
+    {
+        return $this->getCollection($this->getRaw());
+    }
+
+    protected function getCollection($result)
+    {
+        return collect($this->generateModels($result));
+    }
+
+    protected function generateModels($result)
+    {
+        $model_array = [];
+        foreach ($result['hits']['hits'] as $hit) {
+            $model = new $this->model;
+            $model->index = $hit['_index'];
+            $model->type = $hit['_type'];
+            $model->id = $hit['_id'];
+            foreach ($hit['_source'] as $key => $value) {
+                $model->$key = $value;
+            }
+            array_push($model_array, $model);
+        }
+        return $model_array;
+    }
+
+    public function getRaw()
+    {
+        return $this->client->search($this->compile());
+    }
+
+    /**
+     * Compile the query object parameter and construct the query array
+     * @return  array  query array
+     */
+    protected function compile()
+    {
+        // set every condition in the query array
+        foreach ($this->constraints as $constraint) {
+            $this->query['body']['query'] = array_merge($this->query['body']['query'], $this->compileConstraint($constraint));
+        }
+
+        foreach ($this->bools as $bool) {
+            $this->query['body']['query']['bool'][$bool['type']][] = $this->compileConstraint($bool['constraint']);
+        }
+        if ($this->aggs) {
+            $this->query['body']['aggs'] = $this->aggs;
+        }
+        if ($this->sort) {
+            $this->query['body']['sort'] = $this->sort;
+        }
+        if ($this->scroll_param) {
+            $this->query['scroll'] = $this->scroll_param;
+        }
+        return $this->query;
+    }
+
+    /**
+     * Compile the constraint clause
+     * @param  Tamizh\Phpes\ConstraintClause  $constraint  Constraint Clause
+     * @return array  Constraint array
+     */
+    protected function compileConstraint($constraint)
+    {
+        $method = 'compile' . ucfirst($constraint->type);
+        $condition = [$constraint->type => $this->$method($constraint)];
+        return $condition;
+    }
+
+    /**
+     * Set the size of the result from elasticsearch server
+     * @param  integer $size Size of the result
+     * @return $this
+     */
+    public function size($size)
+    {
+        $this->query['body']['size'] = $size;
+        return $this;
+    }
+
+    /**
+     * Get elasticsearch client
+     * @return Elasticsearch\ClientBuilder  Elasticsearch client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
+     * Set model for the query builder object
+     * @param Tamizh\Phpes\Elasticsearch $model Elasticseach model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+        $this->query['index'] = $model->getIndex();
+    }
+
+    /**
+     * Get Elasticsearch model
+     * @return Tamizh\Phpes\Elasticsearch
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    protected function postScroll($scroll_id)
+    {
+        return $this->getCollection($this->client->scroll([
+            'scroll_id' => $scroll_id,
+            'scroll' => $this->scroll_param
+        ]));
+    }
+}

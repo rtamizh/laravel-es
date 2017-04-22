@@ -1,0 +1,20 @@
+{
+    "name": "tamizh/phpes",
+    "type": "package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tamizh",
+            "email": "tamizharasanmts@gmail.com"
+        }
+    ],
+    "require": {
+        "elasticsearch/elasticsearch": "^2.0",
+        "monolog/monolog": "~1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tamizh\\Phpes\\": "src/"
+        }
+    }
+}
