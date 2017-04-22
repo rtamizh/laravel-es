@@ -1,5 +1,5 @@
 {
-    "name": "tamizh/phpes",
+    "name": "tamizh/LaravelEs",
     "type": "package",
     "license": "MIT",
     "authors": [
@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Tamizh\\Phpes\\": "src/"
+            "Tamizh\\LaravelEs\\": "src/"
         }
     }
 }

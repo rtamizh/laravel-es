@@ -1,6 +1,6 @@
 <?php
 
-namespace Tamizh\Phpes\Facades;
+namespace Tamizh\LaravelEs\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -13,6 +13,6 @@ class Elasticsearch extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Tamizh\Phpes\Elasticsearch'; // the IoC binding.
+        return 'Tamizh\LaravelEs\Elasticsearch'; // the IoC binding.
     }
 }

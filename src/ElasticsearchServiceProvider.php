@@ -1,10 +1,10 @@
 <?php
 
-namespace Tamizh\Phpes;
+namespace Tamizh\LaravelEs;
 
 use Illuminate\Support\ServiceProvider;
-use Tamizh\Phpes\Elasticsearch;
-use Tamizh\Phpes\ElasticClient;
+use Tamizh\LaravelEs\Elasticsearch;
+use Tamizh\LaravelEs\ElasticClient;
 
 class ElasticsearchServiceProvider extends ServiceProvider
 {

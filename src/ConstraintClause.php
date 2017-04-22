@@ -1,5 +1,5 @@
 <?php
-namespace Tamizh\Phpes;
+namespace Tamizh\LaravelEs;
 
 /**
 * Basic temoplate class for every constraints in elasticsearch query

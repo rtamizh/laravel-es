@@ -1,9 +1,9 @@
 <?php
 
-namespace Tamizh\Phpes;
+namespace Tamizh\LaravelEs;
 
 use \Iterator;
-use Tamizh\Phpes\QueryBuilder;
+use Tamizh\LaravelEs\QueryBuilder;
 
 class Scroller extends QueryBuilder implements Iterator
 {
@@ -15,7 +15,7 @@ class Scroller extends QueryBuilder implements Iterator
 
     /**
      * Elastic Query Builder
-     * @var Tamizh\Phpes\QueryBuilder
+     * @var Tamizh\LaravelEs\QueryBuilder
      */
     protected $builder;
 
@@ -67,7 +67,7 @@ class Scroller extends QueryBuilder implements Iterator
 
     /**
      * Valid function of iterator
-     * @return  Tamizh\Phpes\Scroller
+     * @return  Tamizh\LaravelEs\Scroller
      */
     public function valid()
     {

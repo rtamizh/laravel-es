@@ -1,10 +1,10 @@
 <?php
 
-namespace Tamizh\Phpes\Traits;
+namespace Tamizh\LaravelEs\Traits;
 
-use Tamizh\Phpes\ConstraintClause;
-use Tamizh\Phpes\AggregationClause;
-use Tamizh\Phpes\Scroller;
+use Tamizh\LaravelEs\ConstraintClause;
+use Tamizh\LaravelEs\AggregationClause;
+use Tamizh\LaravelEs\Scroller;
 
 /**
 * All query related to elasticsearch format is going to be formed here
@@ -15,7 +15,7 @@ trait ElasticQueryTrait
      * Add the match constraint to constraints array
      * @param  string $field Name of the field
      * @param  string $text  Constraint string
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function match($field, $text, $bool = false)
     {
@@ -27,7 +27,7 @@ trait ElasticQueryTrait
      * All bool query callback function handling here.
      * @param  Closure  $closure  closure function of the bool query
      * @param  string  $type  type of the bool
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function bool($closure, $type)
     {
@@ -41,7 +41,7 @@ trait ElasticQueryTrait
     /**
      * Must type of bool query
      * @param  Closure  $closure  closure function of the bool query
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function boolMust($closure)
     {
@@ -51,7 +51,7 @@ trait ElasticQueryTrait
     /**
      * Must Not type of bool query
      * @param  Closure  $closure  closure function of the bool query
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function boolMustNot($closure)
     {
@@ -61,7 +61,7 @@ trait ElasticQueryTrait
     /**
      * Should type of bool query
      * @param  Closure  $closure  closure function of the bool query
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function boolShould($closure)
     {
@@ -71,7 +71,7 @@ trait ElasticQueryTrait
     /**
      * Should Not type of bool query
      * @param  Closure  $closure  closure function of the bool query
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function boolShouldNot($closure)
     {
@@ -82,7 +82,7 @@ trait ElasticQueryTrait
      * Add the terms constraint clause to the constraint array
      * @param  string  $field  Name of the field
      * @param  array  $array  array of values
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function terms($field, $array)
     {
@@ -94,7 +94,7 @@ trait ElasticQueryTrait
      * Aggregations query
      * @param  Closure  $closure  Function for aggregation
      * @param  string  $name  Name of the aggregation
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function aggs($closure, $name = 'aggregation')
     {
@@ -116,7 +116,7 @@ trait ElasticQueryTrait
      * @param  mixed  $field
      * @param  string  $order  order of the sort
      * @param  string  $type   type of the script
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function sort($field, $order = "desc", $type = "number")
     {

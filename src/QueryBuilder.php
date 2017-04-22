@@ -1,7 +1,7 @@
 <?php
-namespace Tamizh\Phpes;
+namespace Tamizh\LaravelEs;
 
-use Tamizh\Phpes\Traits\ElasticQueryTrait;
+use Tamizh\LaravelEs\Traits\ElasticQueryTrait;
 use Illuminate\Support\Collection;
 
 /**
@@ -18,7 +18,7 @@ class QueryBuilder
 
     /**
      * Model that need to be converted as query array
-     * @var Tamizh\phpes\Elasticsearch
+     * @var Tamizh\LaravelEs\Elasticsearch
      */
     protected $model;
 
@@ -108,7 +108,7 @@ class QueryBuilder
 
     /**
      * Initialize the query builder
-     * @param Tamizh\Phpes\Elasticsearch  $model  Elasticsearch Model
+     * @param Tamizh\LaravelEs\Elasticsearch  $model  Elasticsearch Model
      */
     public function __construct($client)
     {
@@ -120,7 +120,7 @@ class QueryBuilder
 
     /**
      * Compile Constrint clause for match
-     * @param  Tamizh\Phpes\ConstraintClause $constraint
+     * @param  Tamizh\LaravelEs\ConstraintClause $constraint
      * @return constraint array
      */
     public function compileMatch($constraint)
@@ -132,7 +132,7 @@ class QueryBuilder
 
     /**
      * Compile terms constraint clause
-     * @param  Tamizh\Phpes\ConstraintClause  $constraint  Constraint Clause
+     * @param  Tamizh\LaravelEs\ConstraintClause  $constraint  Constraint Clause
      * @return  array  condition array
      */
     public function compileTerms($constraint)
@@ -206,7 +206,7 @@ class QueryBuilder
 
     /**
      * Compile the constraint clause
-     * @param  Tamizh\Phpes\ConstraintClause  $constraint  Constraint Clause
+     * @param  Tamizh\LaravelEs\ConstraintClause  $constraint  Constraint Clause
      * @return array  Constraint array
      */
     protected function compileConstraint($constraint)
@@ -238,7 +238,7 @@ class QueryBuilder
 
     /**
      * Set model for the query builder object
-     * @param Tamizh\Phpes\Elasticsearch $model Elasticseach model
+     * @param Tamizh\LaravelEs\Elasticsearch $model Elasticseach model
      */
     public function setModel($model)
     {
@@ -248,7 +248,7 @@ class QueryBuilder
 
     /**
      * Get Elasticsearch model
-     * @return Tamizh\Phpes\Elasticsearch
+     * @return Tamizh\LaravelEs\Elasticsearch
      */
     public function getModel()
     {

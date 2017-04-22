@@ -1,9 +1,9 @@
 <?php
-namespace Tamizh\Phpes;
+namespace Tamizh\LaravelEs;
 
 use Elasticsearch\ClientBuilder;
-use Tamizh\Phpes\ConstraintClause;
-use Tamizh\Phpes\QueryBuilder as QueryBuilder;
+use Tamizh\LaravelEs\ConstraintClause;
+use Tamizh\LaravelEs\QueryBuilder as QueryBuilder;
 
 /**
 *
@@ -77,7 +77,7 @@ abstract class Elasticsearch
 
     /**
      * Return new Query object
-     * @return Tamizh\Phpes\QueryBuilder
+     * @return Tamizh\LaravelEs\QueryBuilder
      */
     public function newQuery()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Tamizh\Phpes;
+namespace Tamizh\LaravelEs;
 
 /**
 * Basic temoplate class for every Aggregation in elasticsearch query
@@ -50,7 +50,7 @@ class AggregationClause
     /**
      * Term aggregation
      * @param  string  $field  Name of the field
-     * @return Tamizh\Phpes\AggregationClause
+     * @return Tamizh\LaravelEs\AggregationClause
      */
     public function terms($field)
     {
@@ -63,7 +63,7 @@ class AggregationClause
     /**
      * Size of the aggregation
      * @param  integer  $size  Size of the aggregation result
-     * @return Tamizh\Phpes\AggregationClause
+     * @return Tamizh\LaravelEs\AggregationClause
      */
     public function size($size)
     {
@@ -77,7 +77,7 @@ class AggregationClause
     /**
      * Min document count needed for aggregation
      * @param  integer  $value  Min document count
-     * @return  Tamizh\Phpes\AggregationClause
+     * @return  Tamizh\LaravelEs\AggregationClause
      */
     public function minDocCount($value)
     {
