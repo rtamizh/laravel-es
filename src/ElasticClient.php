@@ -2,6 +2,7 @@
 namespace Tamizh\LaravelEs;
 
 use Elasticsearch\ClientBuilder;
+use \Exception;
 
 /**
 * Elasticsearch client class
@@ -25,15 +26,12 @@ class ElasticClient
     {
         if ($config->has('elasticsearch')) {
             $this->config = $config->get('elasticsearch');
-        } else {
-            throw new Exception('No config found');
+            $logger = ClientBuilder::defaultLogger($this->config['log_path'] . "elasticsearch.log");
+            $this->client = ClientBuilder::create()
+                ->setHosts($this->config['hosts'])
+                ->setLogger($logger)  // Set the logger with a default logger
+                ->build();
         }
-
-        $logger = ClientBuilder::defaultLogger($this->config['log_path'] . "elasticsearch.log");
-        $this->client = ClientBuilder::create()
-            ->setHosts($this->config['hosts'])
-            ->setLogger($logger)  // Set the logger with a default logger
-            ->build();
     }
 
     public static function getClient()
