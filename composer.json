@@ -1,5 +1,5 @@
 {
-    "name": "tamizh/LaravelEs",
+    "name": "tamizh/laravel-es",
     "type": "package",
     "license": "MIT",
     "authors": [
@@ -16,5 +16,6 @@
         "psr-4": {
             "Tamizh\\LaravelEs\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "stable"
 }
