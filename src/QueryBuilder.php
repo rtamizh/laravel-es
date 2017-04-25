@@ -107,6 +107,12 @@ class QueryBuilder
     protected $collection;
 
     /**
+     * Hightlight Array
+     * @var array
+     */
+    protected $highlight;
+
+    /**
      * Initialize the query builder
      * @param Tamizh\LaravelEs\Elasticsearch  $model  Elasticsearch Model
      */
@@ -124,6 +130,18 @@ class QueryBuilder
      * @return constraint array
      */
     public function compileMatch($constraint)
+    {
+        $condition = array();
+        $condition[$constraint->field] = $constraint->condition;
+        return $condition;
+    }
+
+    /**
+     * Compile Constrint clause for match_phrase
+     * @param  Tamizh\LaravelEs\ConstraintClause $constraint
+     * @return constraint array
+     */
+    public function compileMatchPhrase($constraint)
     {
         $condition = array();
         $condition[$constraint->field] = $constraint->condition;
@@ -152,11 +170,21 @@ class QueryBuilder
         return $this->getCollection($this->getRaw());
     }
 
+    /**
+     * Create collection by the current query result
+     * @param  array  $result  Array of result
+     * @return  Illuminate\Support\Collection
+     */
     protected function getCollection($result)
     {
         return collect($this->generateModels($result));
     }
 
+    /**
+     * Generate Models based on the current result
+     * @param  array  $result  Raw result of current query
+     * @return  array  Array of models
+     */
     protected function generateModels($result)
     {
         $model_array = [];
@@ -168,11 +196,19 @@ class QueryBuilder
             foreach ($hit['_source'] as $key => $value) {
                 $model->$key = $value;
             }
+            if (isset($hit['highlight'])) {
+                $model->highlighted = true;
+                $model->highlight = $hit['highlight'];
+            }
             array_push($model_array, $model);
         }
         return $model_array;
     }
 
+    /**
+     * Get raw ouptut of the current query
+     * @return  Tamizh\LaravelEs\QueryBuilder
+     */
     public function getRaw()
     {
         return $this->client->search($this->compile());
@@ -185,6 +221,7 @@ class QueryBuilder
     protected function compile()
     {
         // set every condition in the query array
+        $this->query['body']['query'] = [];
         foreach ($this->constraints as $constraint) {
             $this->query['body']['query'] = array_merge($this->query['body']['query'], $this->compileConstraint($constraint));
         }
@@ -201,6 +238,9 @@ class QueryBuilder
         if ($this->scroll_param) {
             $this->query['scroll'] = $this->scroll_param;
         }
+        if ($this->highlight) {
+            $this->query['body']['highlight'] = $this->highlight;
+        }
         return $this->query;
     }
 
@@ -211,7 +251,10 @@ class QueryBuilder
      */
     protected function compileConstraint($constraint)
     {
-        $method = 'compile' . ucfirst($constraint->type);
+        $method = 'compile';
+        foreach (explode("_", $constraint->type) as $type) {
+            $method .= ucfirst($type);
+        }
         $condition = [$constraint->type => $this->$method($constraint)];
         return $condition;
     }
@@ -255,6 +298,11 @@ class QueryBuilder
         return $this->model;
     }
 
+    /**
+     * Post the current scroll query
+     * @param  string  $scroll_id  Scroll id of the current query
+     * @return array
+     */
     protected function postScroll($scroll_id)
     {
         return $this->getCollection($this->client->scroll([

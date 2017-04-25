@@ -24,6 +24,18 @@ trait ElasticQueryTrait
     }
 
     /**
+     * Add the match phrase constraint to constraints array
+     * @param  string $field Name of the field
+     * @param  string $text  Constraint string
+     * @return Tamizh\LaravelEs\QueryBuilder
+     */
+    public function matchPhrase($field, $text)
+    {
+        array_push($this->constraints, new ConstraintClause($this, 'match_phrase', $field, $text));
+        return $this;
+    }
+
+    /**
      * All bool query callback function handling here.
      * @param  Closure  $closure  closure function of the bool query
      * @param  string  $type  type of the bool
@@ -103,12 +115,19 @@ trait ElasticQueryTrait
         return $this;
     }
 
+    /**
+     * Script functionality of elasticsearch
+     * @param  string  $script  Script that need to be applied to query
+     * @param  string  $lang    Language of the script [optional]
+     * @return Tamizh\LaravelEs\QueryBuilder
+     */
     public function script($script, $lang = "painless")
     {
         $this->script = [
             "lang" => "painless",
             "inline" => $script
         ];
+        return $this;
     }
 
     /**
@@ -144,5 +163,24 @@ trait ElasticQueryTrait
     {
         $this->scroll_param = $limit;
         return new Scroller($this);
+    }
+
+    /**
+     * Highlight feature of elasticsearch
+     * @param  string  $fields    Fields list that need to be highlighted (comma seperated)
+     * @param  string  $pre_tags  Html tag that will be added before the highlighted word
+     * @param  string  $post_tags Html tag that will be added before the highlighted word
+     * @return Tamizh\LaravelEs\QueryBuilder
+     */
+    public function highlight($fields, $pre_tags = null, $post_tags = null)
+    {
+        $this->highlight['fields'][$fields] = new \stdClass();
+        if ($pre_tags) {
+            $this->highlight['pre_tags'] = $pre_tags;
+        }
+        if ($post_tags) {
+            $this->highlight['post_tags'] = $post_tags;
+        }
+        return $this;
     }
 }
