@@ -56,9 +56,10 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
 
 # Available Functions
 
-1. match - Returns the results that matches the text
+1. match & match_phrase - Returns the results that matches the text
     ```
     Log::match('field', 'text')->get()
+    Log::matchPhrase('field', 'hello world')->get()
     ```
 2. boolMust, boolMustNot, boolShould, boolShouldNot - Boolean queries (Equal to AND and OR in mysql)
     ```
@@ -96,6 +97,10 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
 7. size - Size of the result collection
     ```
     Log::match('field', 'text')->size(100)->get()
+    ```
+8. highlight - To highlight the selected text
+    ```
+    Log::match('field', $text)->highlight('field')->get()
     ```
 
 
