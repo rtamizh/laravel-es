@@ -183,4 +183,11 @@ trait ElasticQueryTrait
         }
         return $this;
     }
+
+    public function filter($closure)
+    {
+        call_user_func($closure, $query = new static($this->getClient()));
+        $this->filter = $query->compile()['body']['query'];
+        return $this;
+    }
 }

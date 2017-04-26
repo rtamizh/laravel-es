@@ -113,6 +113,12 @@ class QueryBuilder
     protected $highlight;
 
     /**
+     * Filter Array
+     * @var array
+     */
+    protected $filter;
+
+    /**
      * Initialize the query builder
      * @param Tamizh\LaravelEs\Elasticsearch  $model  Elasticsearch Model
      */
@@ -218,7 +224,7 @@ class QueryBuilder
      * Compile the query object parameter and construct the query array
      * @return  array  query array
      */
-    protected function compile()
+    public function compile()
     {
         // set every condition in the query array
         $this->query['body']['query'] = [];
@@ -240,6 +246,9 @@ class QueryBuilder
         }
         if ($this->highlight) {
             $this->query['body']['highlight'] = $this->highlight;
+        }
+        if ($this->filter) {
+            $this->query['body']['query']['bool']['filter'] = $this->filter;
         }
         return $this->query;
     }
