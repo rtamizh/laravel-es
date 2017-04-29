@@ -98,4 +98,24 @@ abstract class Elasticsearch
         $instance = new static;
         return call_user_func_array([$instance, $method], $parameters);
     }
+
+    /**
+     * Save current model to the Elasticsearch
+     * @return Model  Current model
+     */
+    public function save()
+    {
+        $params = [
+            'index' => $this->index,
+            'type' => $this->type,
+            'id' => $this->id
+        ];
+        foreach ($this as $key => $value) {
+            if ($key != 'index' && $key != 'type' && $key != 'id' && $key != 'highlight') {
+                $params['body'][$key] = $value;
+            }
+        }
+        $this->newQuery()->client->index($params);
+        return $this;
+    }
 }

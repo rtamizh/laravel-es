@@ -102,6 +102,16 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
     Log::match('field', $text)->highlight('field')->get()
     ```
+9. first - To get first model
+    ```
+    Log::match('field', $text)->first()
+    ```
+10. save - To save the current model to the ES
+    ```
+    $log = Log::match('field', $text)->first();
+    $log->count = $log->count + 1;
+    $log->save();
+    ```
 
 
 # TODO

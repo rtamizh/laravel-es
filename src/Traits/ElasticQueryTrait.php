@@ -149,7 +149,7 @@ trait ElasticQueryTrait
                 ]
             ];
         }
-        if ($field instanceof str) {
+        if (is_string($field)) {
             $this->sort = [
                 $field => [
                     'order' => $order

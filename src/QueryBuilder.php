@@ -26,7 +26,7 @@ class QueryBuilder
      * Elasticsearch client object
      * @var Elasticsearch\ClientBuilder
      */
-    protected $client;
+    public $client;
 
     /**
      * The main query part in the query array
@@ -177,6 +177,16 @@ class QueryBuilder
     }
 
     /**
+     * Return First model from the current query collection
+     * @return mixed  Model or null
+     */
+    public function first()
+    {
+        $collection = $this->get();
+        return count($collection) ? $collection[0] : null;
+    }
+
+    /**
      * Create collection by the current query result
      * @param  array  $result  Array of result
      * @return  Illuminate\Support\Collection
@@ -203,7 +213,6 @@ class QueryBuilder
                 $model->$key = $value;
             }
             if (isset($hit['highlight'])) {
-                $model->highlighted = true;
                 $model->highlight = $hit['highlight'];
             }
             array_push($model_array, $model);
