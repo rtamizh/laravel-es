@@ -119,6 +119,12 @@ class QueryBuilder
     protected $filter;
 
     /**
+     * query string functionality
+     * @var Tamizh\LaravelES\QueryStringClause
+     */
+    protected $query_string;
+
+    /**
      * Initialize the query builder
      * @param Tamizh\LaravelEs\Elasticsearch  $model  Elasticsearch Model
      */
@@ -258,6 +264,9 @@ class QueryBuilder
         }
         if ($this->filter) {
             $this->query['body']['query']['bool']['filter'] = $this->filter;
+        }
+        if ($this->query_string) {
+            $this->query['body']['query']['query_string'] = $this->query_string;
         }
         return $this->query;
     }

@@ -118,4 +118,14 @@ abstract class Elasticsearch
         $this->newQuery()->client->index($params);
         return $this;
     }
+
+    public function delete()
+    {
+        $params = [
+            'index' => $this->index,
+            'type' => $this->type,
+            'id' => $this->id
+        ];
+        return $this->newQuery()->client->delete($params);
+    }
 }

@@ -4,6 +4,7 @@ namespace Tamizh\LaravelEs\Traits;
 
 use Tamizh\LaravelEs\ConstraintClause;
 use Tamizh\LaravelEs\AggregationClause;
+use Tamizh\LaravelEs\QueryStringClause;
 use Tamizh\LaravelEs\Scroller;
 
 /**
@@ -188,6 +189,18 @@ trait ElasticQueryTrait
     {
         call_user_func($closure, $query = new static($this->getClient()));
         $this->filter = $query->compile()['body']['query'];
+        return $this;
+    }
+
+    /**
+     * query string functionality
+     * @param  closure  $closure  Query string closure
+     * @return  Tamizh\LaravelEs\QueryBuilder
+     */
+    public function queryString($closure)
+    {
+        call_user_func($closure, $query_string = new QueryStringClause($name));
+        $this->query_string = $query_string->compile();
         return $this;
     }
 }

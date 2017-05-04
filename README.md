@@ -112,6 +112,19 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     $log->count = $log->count + 1;
     $log->save();
     ```
+11. delete - To delete the current model from ES
+    ```
+    $log = Log::match('field', $text)->first();
+    $log->count = $log->count + 1;
+    $log->delete();
+    ```
+12. query_string - query string function in ES
+    ```
+    $log = Log::queryString(function($query){
+        $query->query('tech*')
+            ->fields(['errors', 'content']);
+    })->get();
+    ```
 
 
 # TODO
