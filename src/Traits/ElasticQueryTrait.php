@@ -48,6 +48,12 @@ trait ElasticQueryTrait
         foreach ($query->constraints as $constraint) {
             $this->bools[] = compact('constraint', 'type');
         }
+        if ($query->query_string) {
+            $query_string = array(
+                'query_string' => $query->query_string
+            );
+            $this->bools[] = compact('query_string', 'type');
+        }
         return $this;
     }
 

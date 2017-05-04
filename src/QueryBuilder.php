@@ -248,7 +248,12 @@ class QueryBuilder
         }
 
         foreach ($this->bools as $bool) {
-            $this->query['body']['query']['bool'][$bool['type']][] = $this->compileConstraint($bool['constraint']);
+            if (array_key_exists('constraint', $bool)) {
+                $this->query['body']['query']['bool'][$bool['type']][] = $this->compileConstraint($bool['constraint']);
+            }
+            if (array_key_exists('query_string', $bool)) {
+                $this->query['body']['query']['bool'][$bool['type']][] = $bool['query_string'];
+            }
         }
         if ($this->aggs) {
             $this->query['body']['aggs'] = $this->aggs;

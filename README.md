@@ -125,6 +125,15 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
             ->fields(['errors', 'content']);
     })->get();
     ```
+    in bool functions
+    ```
+    Log::boolMust(function($query){
+        $query->queryString(function($query){
+            $query->query('tech*')
+                ->fields(['errors', 'content']);
+        })
+    })->get();
+    ```
 
 
 # TODO
