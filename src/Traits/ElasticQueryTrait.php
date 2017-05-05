@@ -209,4 +209,10 @@ trait ElasticQueryTrait
         $this->query_string = $query_string->compile();
         return $this;
     }
+
+    public function exists($field)
+    {
+        array_push($this->constraints, new ConstraintClause($this, 'exists', 'field', $field));
+        return $this;
+    }
 }

@@ -135,6 +135,12 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     })->get();
     ```
 
+13. exists - exists condition functionality
+    ```
+    $log = Log::exists('field')->get();
+    ```
+
+
 
 # TODO
 1. Write test cases (stable version)

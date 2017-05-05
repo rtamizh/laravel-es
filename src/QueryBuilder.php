@@ -172,6 +172,13 @@ class QueryBuilder
         return $condition;
     }
 
+    public function compileExists($constraint)
+    {
+        $condition = array();
+        $condition['field'] = $constraint->condition;
+        return $condition;
+    }
+
 
     /**
      * Form and return the query from elasticsearch model
