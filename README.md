@@ -50,7 +50,7 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
     class Log extends Elasticsearch
     {
-      protected $index = 'logs*'
+      public $index = 'logs*'
     }
     ```
 
@@ -140,7 +140,8 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     $log = Log::exists('field')->get();
     ```
 
-
+# Notes
+1. Following field names are reserved - _id, _type, _index, _highlight
 
 # TODO
 1. Write test cases (stable version)

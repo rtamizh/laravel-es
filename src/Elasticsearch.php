@@ -21,19 +21,19 @@ abstract class Elasticsearch
      * @var string
      * @todo index need to be set automatically by child class name
      */
-    public $index;
+    public $_index;
 
     /**
      * Type of the current model
      * @var string
      */
-    public $type;
+    public $_type;
 
     /**
      * Primary Id of the current model
      * @var string
      */
-    public $id;
+    public $_id;
 
     public static function setClient($client_connection)
     {
@@ -42,14 +42,14 @@ abstract class Elasticsearch
 
     /**
      * Set the index externally while querying
-     * @param  string  $string  Index name
+     * @param  string  $_index  Index name
      * @return App\Elasticsearch
      * @todo index name should be moved to normal db connection model
      *       to make it is generic
      */
-    public static function index($string)
+    public static function index($index)
     {
-        $this->index = $string;
+        static::$_index = $index;
         return $this;
     }
 
@@ -59,7 +59,12 @@ abstract class Elasticsearch
      */
     public function getIndex()
     {
-        return $this->index;
+        return $this->_index;
+    }
+
+    public function getType()
+    {
+        return $this->_type;
     }
 
     /**
@@ -106,12 +111,12 @@ abstract class Elasticsearch
     public function save()
     {
         $params = [
-            'index' => $this->index,
-            'type' => $this->type,
-            'id' => $this->id
+            'index' => $this->_index,
+            'type' => $this->_type,
+            'id' => $this->_id
         ];
         foreach ($this as $key => $value) {
-            if ($key != 'index' && $key != 'type' && $key != 'id' && $key != 'highlight') {
+            if ($key != '_index' && $key != '_type' && $key != '_id' && $key != '_highlight') {
                 $params['body'][$key] = $value;
             }
         }
@@ -122,9 +127,9 @@ abstract class Elasticsearch
     public function delete()
     {
         $params = [
-            'index' => $this->index,
-            'type' => $this->type,
-            'id' => $this->id
+            'index' => $this->_index,
+            'type' => $this->_type,
+            'id' => $this->_id
         ];
         return $this->newQuery()->client->delete($params);
     }

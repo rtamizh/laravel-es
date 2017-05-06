@@ -219,14 +219,14 @@ class QueryBuilder
         $model_array = [];
         foreach ($result['hits']['hits'] as $hit) {
             $model = new $this->model;
-            $model->index = $hit['_index'];
-            $model->type = $hit['_type'];
-            $model->id = $hit['_id'];
+            $model->_index = $hit['_index'];
+            $model->_type = $hit['_type'];
+            $model->_id = $hit['_id'];
             foreach ($hit['_source'] as $key => $value) {
                 $model->$key = $value;
             }
             if (isset($hit['highlight'])) {
-                $model->highlight = $hit['highlight'];
+                $model->_highlight = $hit['highlight'];
             }
             array_push($model_array, $model);
         }
@@ -248,6 +248,7 @@ class QueryBuilder
      */
     public function compile()
     {
+        $this->query['index'] = $this->model->getIndex();
         // set every condition in the query array
         $this->query['body']['query'] = [];
         foreach ($this->constraints as $constraint) {
@@ -325,7 +326,6 @@ class QueryBuilder
     public function setModel($model)
     {
         $this->model = $model;
-        $this->query['index'] = $model->getIndex();
     }
 
     /**
