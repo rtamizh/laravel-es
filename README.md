@@ -50,7 +50,8 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
     class Log extends Elasticsearch
     {
-      public $index = 'logs*'
+      public $_index = 'logs*';
+      public $_type = 'log';
     }
     ```
 
@@ -115,8 +116,11 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
 11. delete - To delete the current model from ES
     ```
     $log = Log::match('field', $text)->first();
-    $log->count = $log->count + 1;
     $log->delete();
+    ```
+    or 
+    ```
+    Log::delete(1);
     ```
 12. query_string - query string function in ES
     ```
@@ -138,6 +142,18 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
 13. exists - exists condition functionality
     ```
     $log = Log::exists('field')->get();
+    ```
+14. index - index document in ES
+    ```
+    Log::index(['key' => 'value', 'key1' => 'value1'], id);
+    ```
+15. update - update document in ES
+    ```
+    Log::update(['new_key' => 'new_value', 'old_key' => 'new_value'], id);
+    ```
+16. removeKey - remove unwanted key from ES
+    ```
+    Log::removeKey('unwanted_key', id);
     ```
 
 # Notes

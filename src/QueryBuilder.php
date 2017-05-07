@@ -1,6 +1,7 @@
 <?php
 namespace Tamizh\LaravelEs;
 
+use Exception;
 use Tamizh\LaravelEs\Traits\ElasticQueryTrait;
 use Illuminate\Support\Collection;
 
@@ -248,7 +249,6 @@ class QueryBuilder
      */
     public function compile()
     {
-        $this->query['index'] = $this->model->getIndex();
         // set every condition in the query array
         $this->query['body']['query'] = [];
         foreach ($this->constraints as $constraint) {
@@ -326,6 +326,7 @@ class QueryBuilder
     public function setModel($model)
     {
         $this->model = $model;
+        $this->query['index'] = $this->model->getIndex();
     }
 
     /**
@@ -348,5 +349,111 @@ class QueryBuilder
             'scroll_id' => $scroll_id,
             'scroll' => $this->scroll_param
         ]));
+    }
+
+    /**
+     * Set the Index of the current Model
+     * @param string  $index  Index of the Model
+     */
+    public function setIndex($index)
+    {
+        $this->model->_index = $index;
+        $this->query['index'] = $this->model->getIndex();
+        return $this;
+    }
+
+    /**
+     * Set the Type of the current Model
+     * @param string  $type  Type of model
+     */
+    public function setType($type)
+    {
+        $this->model->_type = $type;
+        return $this;
+    }
+
+    /**
+     * Update the ES document
+     * @param  array  $doc  key value pair
+     * @param  string  $id   Id of the document
+     * @return boolean
+     */
+    public function update($doc = [], $id = null)
+    {
+        $params['index'] = $this->model->getIndex();
+        $params['type'] = $this->model->getType();
+        if ($this->model->_id != null || $id != null) {
+            $params['id'] = $id ? $id : $this->model->_id;
+        } else {
+            throw new Exception("Error Processing Request", 1);
+        }
+        if (count($doc)) {
+            $params['body']['doc'] = $doc;
+        }
+        return $this->client->update($params) ? true : false;
+    }
+
+    /**
+     * Remove a key value from ES document
+     * @param  string  $key  key name
+     * @param  string  $id   Document Id
+     * @return  boolean
+     */
+    public function removeKey($key, $id = null)
+    {
+        $params['index'] = $this->model->getIndex();
+        $params['type'] = $this->model->getType();
+        if ($this->model->_id == null) {
+            $params['id'] = $id;
+        }
+        $params['body']['script'] = "ctx._source.remove(\"".$key."\")";
+        return $this->client->update($params) ? true : false;
+    }
+
+    /**
+     * Index a new document to ES
+     * @param  array  $doc document
+     * @param  string  $id  Document Id (optional)
+     * @return  Tamizh\LaravelES\Elasticsearch
+     */
+    public function index($doc = [], $id = null)
+    {
+        $params['index'] = $this->model->getIndex();
+        $params['type'] = $this->model->getType();
+        if ($id) {
+            $params['id'] = $id;
+        }
+        $params['body'] = $doc;
+        $result = $this->client->index($params);
+        if ($result['created'] == true) {
+            $model = new $this->model;
+            $model->_index = $result['_index'];
+            $model->_type = $result['_type'];
+            $model->_id = $result['_id'];
+            foreach ($doc as $key => $value) {
+                $model->$key = $value;
+            }
+            return $model;
+        }
+        return null;
+    }
+
+    /**
+     * Delete Document from ES
+     * @param  string  $id  Document ID
+     * @return  boolean
+     */
+    public function delete($id = null)
+    {
+        $params = [
+            'index' => $this->model->_index,
+            'type' => $this->model->_type
+        ];
+        if ($id != null || $this->model->_id != null) {
+            $params['id'] = $id ? $id : $this->model->_id;
+        } else {
+            throw new Exception("Error Processing Request", 1);
+        }
+        return $this->client->delete($params);
     }
 }

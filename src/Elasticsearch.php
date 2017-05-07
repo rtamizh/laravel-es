@@ -41,19 +41,6 @@ abstract class Elasticsearch
     }
 
     /**
-     * Set the index externally while querying
-     * @param  string  $_index  Index name
-     * @return App\Elasticsearch
-     * @todo index name should be moved to normal db connection model
-     *       to make it is generic
-     */
-    public static function index($index)
-    {
-        static::$_index = $index;
-        return $this;
-    }
-
-    /**
      * Return the current model index
      * @return string The current index
      */
@@ -122,15 +109,5 @@ abstract class Elasticsearch
         }
         $this->newQuery()->client->index($params);
         return $this;
-    }
-
-    public function delete()
-    {
-        $params = [
-            'index' => $this->_index,
-            'type' => $this->_type,
-            'id' => $this->_id
-        ];
-        return $this->newQuery()->client->delete($params);
     }
 }
