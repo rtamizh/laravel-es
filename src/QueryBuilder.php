@@ -262,6 +262,9 @@ class QueryBuilder
             if (array_key_exists('query_string', $bool)) {
                 $this->query['body']['query']['bool'][$bool['type']][] = $bool['query_string'];
             }
+            if (array_key_exists('script', $bool)) {
+                $this->query['body']['query']['bool'][$bool['type']][] = $bool['script'];
+            }
         }
         if ($this->aggs) {
             $this->query['body']['aggs'] = $this->aggs;
@@ -280,6 +283,9 @@ class QueryBuilder
         }
         if ($this->query_string) {
             $this->query['body']['query']['query_string'] = $this->query_string;
+        }
+        if ($this->script) {
+            $this->query['body']['query']['script']['script'] = $this->script;
         }
         return $this->query;
     }

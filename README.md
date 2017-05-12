@@ -155,6 +155,10 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
     Log::removeKey('unwanted_key', id);
     ```
+17. script - script functionality
+    ```
+    Log::script("doc['errors'].value > 10").get()
+    ```
 
 # Notes
 1. Following field names are reserved - _id, _type, _index, _highlight

@@ -54,6 +54,14 @@ trait ElasticQueryTrait
             );
             $this->bools[] = compact('query_string', 'type');
         }
+        if ($query->script) {
+            $script = array(
+                'script' => array(
+                    'script' => $query->script
+                )
+            );
+            $this->bools[] = compact('script', 'type');
+        }
         return $this;
     }
 
