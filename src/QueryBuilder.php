@@ -69,7 +69,7 @@ class QueryBuilder
      * The aggregations of the query
      * @var array
      */
-    protected $aggs;
+    protected $aggs = [];
 
     /**
      * The sort constraint of the query
@@ -244,6 +244,15 @@ class QueryBuilder
     }
 
     /**
+     * Get the count of documents for the current query
+     * @return int  Document count
+     */
+    public function count()
+    {
+        return $this->client->count($this->compile())['count'];
+    }
+
+    /**
      * Compile the query object parameter and construct the query array
      * @return  array  query array
      */
@@ -266,7 +275,7 @@ class QueryBuilder
                 $this->query['body']['query']['bool'][$bool['type']][] = $bool['script'];
             }
         }
-        if ($this->aggs) {
+        if (!empty($this->aggs)) {
             $this->query['body']['aggs'] = $this->aggs;
         }
         if ($this->sort) {

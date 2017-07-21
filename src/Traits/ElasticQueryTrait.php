@@ -126,7 +126,7 @@ trait ElasticQueryTrait
     public function aggs($closure, $name = 'aggregation')
     {
         call_user_func($closure, $aggs = new AggregationClause($name));
-        $this->aggs = $aggs->getAggsArray();
+        $this->aggs[$name] = $aggs->getAggsArray();
         return $this;
     }
 

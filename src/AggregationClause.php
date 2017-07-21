@@ -61,6 +61,32 @@ class AggregationClause
     }
 
     /**
+     * To get the distinct count of a field
+     * @param  string $field Field Name
+     * @return  Tamizh\LaravelEs\AggregationClause
+     */
+    public function cardinality($field)
+    {
+        $this->field = $field;
+        $this->type = 'cardinality';
+        $this->aggs_array[$this->name][$this->type]['field'] = $this->field;
+        return $this;
+    }
+
+    /**
+     * Gives the sum value of a field
+     * @param  string $field Field Name
+     * @return  Tamizh\LaravelEs\AggregationClause
+     */
+    public function sum($field)
+    {
+        $this->field = $field;
+        $this->type = "sum";
+        $this->aggs_array[$this->name][$this->type]['field'] = $this->field;
+        return $this;
+    }
+
+    /**
      * Size of the aggregation
      * @param  integer  $size  Size of the aggregation result
      * @return Tamizh\LaravelEs\AggregationClause
@@ -83,8 +109,21 @@ class AggregationClause
     {
         $this->min_doc_count = $value;
         if ($this->type != null) {
-            $this->aggs_array[$this->name][$this->type]['min_doc_count'] = $this->min_doc_count;
+            $this->aggs_array[$this->type]['min_doc_count'] = $this->min_doc_count;
         }
+        return $this;
+    }
+
+    /**
+     * To add sub aggregation to current aggregation
+     * @param  Closure  $closure  Function for aggregation
+     * @param  string $name  Aggregation Name
+     * @return Tamizh\LaravelEs\AggregationClause
+     */
+    public function aggs($closure, $name = "aggregation")
+    {
+        call_user_func($closure, $aggs = new AggregationClause($name));
+        $this->aggs_array['aggs'][$name] = $aggs->getAggsArray()[$name];
         return $this;
     }
 
