@@ -78,6 +78,35 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
         $query->terms('field')->size(10)->minDocCount(10);
     }, 'top_logs')
     ```
+
+    Multiple aggregation can be achieved by 
+    ```
+    Log::aggs(function($query){
+        $query->terms('field')->size(10)->minDocCount(10);
+    }, 'top_logs')
+    ->aggs(function($query){
+        $query->sum('field')
+    });
+    ```
+    Sub Aggregation can be achieved by
+    ```
+    Log::aggs(function($query){
+        $query->terms('field')
+            ->aggs(function($sub_query){
+                $sub_query->sum('field');
+            });
+    }, 'top_logs')
+    ```
+
+    available functions
+    a) terms
+    b) cardinality
+    c) max
+    d) min
+    e) sum_bucket
+    f) sum
+
+
 5. sort - Sort the query result
     ```
     Log::sort('field', 'desc')

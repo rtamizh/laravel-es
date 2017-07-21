@@ -56,7 +56,7 @@ class AggregationClause
     {
         $this->type = 'terms';
         $this->field = $field;
-        $this->aggs_array[$this->name][$this->type]['field'] = $this->field;
+        $this->aggs_array[$this->type]['field'] = $this->field;
         return $this;
     }
 
@@ -69,7 +69,40 @@ class AggregationClause
     {
         $this->field = $field;
         $this->type = 'cardinality';
-        $this->aggs_array[$this->name][$this->type]['field'] = $this->field;
+        $this->aggs_array[$this->type]['field'] = $this->field;
+        return $this;
+    }
+
+    /**
+     * To get the max value of the field
+     * @param  string $field Field Name
+     * @return  Tamizh\LaravelEs\AggregationClause
+     */
+    public function max($field)
+    {
+        $this->field = $field;
+        $this->type = 'max';
+        $this->aggs_array[$this->type]['field'] = $this->field;
+        return $this;
+    }
+
+    /**
+     * To get the min value of the field
+     * @param  string $field Field Name
+     * @return  Tamizh\LaravelEs\AggregationClause
+     */
+    public function min($field)
+    {
+        $this->field = $field;
+        $this->type = 'min';
+        $this->aggs_array[$this->type]['field'] = $this->field;
+        return $this;
+    }
+
+    public function sumBucket($path)
+    {
+        $this->type = 'sum_bucket';
+        $this->aggs_array[$this->type]['buckets_path'] = $path;
         return $this;
     }
 
@@ -82,7 +115,7 @@ class AggregationClause
     {
         $this->field = $field;
         $this->type = "sum";
-        $this->aggs_array[$this->name][$this->type]['field'] = $this->field;
+        $this->aggs_array[$this->type]['field'] = $this->field;
         return $this;
     }
 
@@ -95,7 +128,7 @@ class AggregationClause
     {
         $this->size = $size;
         if ($this->type != null) {
-            $this->aggs_array[$this->name][$this->type]['size'] = $size;
+            $this->aggs_array[$this->type]['size'] = $size;
         }
         return $this;
     }
@@ -123,7 +156,7 @@ class AggregationClause
     public function aggs($closure, $name = "aggregation")
     {
         call_user_func($closure, $aggs = new AggregationClause($name));
-        $this->aggs_array['aggs'][$name] = $aggs->getAggsArray()[$name];
+        $this->aggs_array['aggs'][$name] = $aggs->getAggsArray();
         return $this;
     }
 
