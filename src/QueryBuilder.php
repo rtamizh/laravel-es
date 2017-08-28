@@ -180,6 +180,13 @@ class QueryBuilder
         return $condition;
     }
 
+    public function compileRange($constraint)
+    {
+        $condition = array();
+        $condition[$constraint->field] = $constraint->condition;
+        return $condition;
+    }
+
 
     /**
      * Form and return the query from elasticsearch model

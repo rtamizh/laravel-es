@@ -223,4 +223,16 @@ trait ElasticQueryTrait
         array_push($this->constraints, new ConstraintClause($this, 'exists', 'field', $field));
         return $this;
     }
+
+    public function range($field, $range)
+    {
+        array_push($this->constraints, new ConstraintClause($this, 'range', $field, $range));
+        return $this;
+    }
+
+    public function rangeBetween($field, $min, $max)
+    {
+        array_push($this->constraints, new ConstraintClause($this, 'range', $field, ['gte'=>$min, 'lte'=>$max]));
+        return $this;
+    }
 }

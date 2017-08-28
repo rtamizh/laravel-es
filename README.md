@@ -194,6 +194,17 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     Log::script("doc['errors'].value > 10")->count()
     ```
 
+19. range - get the result set between a range
+    ```
+    Log::range('error_rate', ['gte'=>20, 'lte'=>80])->get();
+    ```
+20. rangeBetween - get the result set between a range (Simplified version of range)
+    ```
+    Log::rangeBetween('error_rate', 20, 30)->get();
+    20 -> gte
+    30 -> lte
+    ```
+
 # Notes
 1. Following field names are reserved - _id, _type, _index, _highlight
 
