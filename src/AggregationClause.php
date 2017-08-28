@@ -37,6 +37,12 @@ class AggregationClause
     protected $min_doc_count;
 
     /**
+     * Time interval that used for date related aggregations
+     * @var string
+     */
+    protected $interval;
+
+    /**
      * Aggregation Array
      * @var array
      */
@@ -143,6 +149,34 @@ class AggregationClause
         $this->min_doc_count = $value;
         if ($this->type != null) {
             $this->aggs_array[$this->type]['min_doc_count'] = $this->min_doc_count;
+        }
+        return $this;
+    }
+
+    /**
+     * Date Histogram aggregation (Ex - Monthly interval)
+     * @param  string  $field  Name of the field
+     * @return  Tamizh\LaravelEs\AggregationClause
+     */
+    public function dateHistogram($field)
+    {
+        $this->type = 'date_histogram';
+        $this->field = $field;
+        $this->aggs_array[$this->type]['field'] = $this->field;
+        $this->aggs_array[$this->type]['interval'] = 'month';
+        return $this;
+    }
+
+    /**
+     * Set interval value that used for time related aggregations
+     * @param  string  $value  interval strings (Ex - minute, hour, week, month)
+     * @return  Tamizh\LaravelEs\AggregationClause
+     */
+    public function interval($value)
+    {
+        $this->interval = $value;
+        if ($this->type != null) {
+            $this->aggs_array[$this->type]['interval'] = $this->interval;
         }
         return $this;
     }

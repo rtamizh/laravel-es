@@ -105,6 +105,7 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     d) min
     e) sum_bucket
     f) sum
+    d) date_histogram (with interval option [default - month])
 
 
 5. sort - Sort the query result
@@ -186,7 +187,11 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
 17. script - script functionality
     ```
-    Log::script("doc['errors'].value > 10").get()
+    Log::script("doc['errors'].value > 10")->get()
+    ```
+18. count - get count of documents for current result
+    ```
+    Log::script("doc['errors'].value > 10")->count()
     ```
 
 # Notes
