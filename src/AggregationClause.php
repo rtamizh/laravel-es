@@ -202,4 +202,12 @@ class AggregationClause
     {
         return $this->aggs_array;
     }
+
+    public function order($aggs_field, $order)
+    {
+        if ($this->type != null) {
+            $this->aggs_array[$this->type]['order'][$aggs_field] = $order;
+        }
+        return $this;
+    }
 }
