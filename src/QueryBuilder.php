@@ -162,6 +162,18 @@ class QueryBuilder
     }
 
     /**
+     * Compile the constraint clause for match_phrase_prefix
+     * @param  Tamizh\LaravelEs\ConstraintClause $constraint  $constraint
+     * @return  constraint array
+     */
+    public function compileMatchPhrasePrefix($constraint)
+    {
+        $condition = array();
+        $condition[$constraint->field] = $constraint->condition;
+        return $condition;
+    }
+
+    /**
      * Compile terms constraint clause
      * @param  Tamizh\LaravelEs\ConstraintClause  $constraint  Constraint Clause
      * @return  array  condition array

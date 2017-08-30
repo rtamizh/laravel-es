@@ -37,6 +37,18 @@ trait ElasticQueryTrait
     }
 
     /**
+     * Add the match phrase prefix constraint to constraints array
+     * @param  string $field Name of the field
+     * @param  string $text  Constraint string
+     * @return Tamizh\LaravelEs\QueryBuilder
+     */
+    public function matchPhrasePrefix($field, $text)
+    {
+        array_push($this->constraints, new ConstraintClause($this, 'match_phrase_prefix', $field, $text));
+        return $this;
+    }
+
+    /**
      * All bool query callback function handling here.
      * @param  Closure  $closure  closure function of the bool query
      * @param  string  $type  type of the bool
