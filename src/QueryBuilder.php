@@ -333,6 +333,18 @@ class QueryBuilder
     }
 
     /**
+     * Set the from point of the result set [Mysql Offset]
+     * [only applicable for 10000 result window, scroll is encouraged for bigger pagination]
+     * @param  integer  $from  From point
+     * @return  $this
+     */
+    public function from($from)
+    {
+        $this->query['body']['from'] = $from;
+        return $this;
+    }
+
+    /**
      * Get elasticsearch client
      * @return Elasticsearch\ClientBuilder  Elasticsearch client
      */
