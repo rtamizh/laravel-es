@@ -61,6 +61,7 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
     Log::match('field', 'text')->get()
     Log::matchPhrase('field', 'hello world')->get()
+    Log::matchPhrasePrefix('field', 'hello')->get()
     ```
 2. boolMust, boolMustNot, boolShould, boolShouldNot - Boolean queries (Equal to AND and OR in mysql)
     ```
@@ -203,6 +204,11 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     Log::rangeBetween('error_rate', 20, 30)->get();
     20 -> gte
     30 -> lte
+    ```
+21. from - pagination option in elasticsearch [MySQL offset]
+    [only applicable for 10000 result window, scroll is encouraged for bigger pagination]
+    ```
+    Log::match('field', 'text')->size(100)->from(200)->get()
     ```
 
 # Notes
