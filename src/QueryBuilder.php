@@ -224,9 +224,10 @@ class QueryBuilder
     public function paginate($perPage, $page = 1)
     {
         // set the size and from parameters as per the pagination
-        $this->size($perPage)->from(($page - 1) * $perPage);
+        $this->size($perPage);
+        $this->from($perPage)->from(($page - 1) * $perPage);
         $raw = $this->getRaw();
-        return new LengthAwarePaginator($this->getCollection($raw)->forPage($page, $perPage), $raw['hits']['total'], $perPage, $page);
+        return new LengthAwarePaginator($this->getCollection($raw)->forPage(1, $perPage), $raw['hits']['total'], $perPage, $page);
     }
 
     /**
