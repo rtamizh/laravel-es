@@ -4,6 +4,8 @@ namespace Tamizh\LaravelEs;
 use Exception;
 use Tamizh\LaravelEs\Traits\ElasticQueryTrait;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 
 /**
 * Convert Elasticsearch model object query array
@@ -219,6 +221,14 @@ class QueryBuilder
         return count($collection) ? $collection[0] : null;
     }
 
+    public function paginate($perPage, $page = 1)
+    {
+        // set the size and from parameters as per the pagination
+        $this->size($perPage)->from(($page - 1) * $perPage);
+        $raw = $this->getRaw();
+        return new LengthAwarePaginator($this->getCollection($raw)->forPage($page, $perPage), $raw['hits']['total'], $perPage, $page);
+    }
+
     /**
      * Create collection by the current query result
      * @param  array  $result  Array of result
@@ -226,7 +236,11 @@ class QueryBuilder
      */
     protected function getCollection($result)
     {
-        return collect($this->generateModels($result));
+        $collection = new Collection();
+        foreach ($this->generateModels($result) as $model) {
+            $collection->push($model);
+        }
+        return $collection;
     }
 
     /**
