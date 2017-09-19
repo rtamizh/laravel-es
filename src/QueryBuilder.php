@@ -517,4 +517,14 @@ class QueryBuilder
         }
         return $this->client->delete($params);
     }
+
+    /**
+     * Bulk Document indexing to ES
+     * @param  array  $array  array of documents
+     * @return  boolean
+     */
+    public function bulk($docs = [])
+    {
+        return $this->client->bulk($docs);
+    }
 }
