@@ -257,15 +257,28 @@ class QueryBuilder
             $model->_index = $hit['_index'];
             $model->_type = $hit['_type'];
             $model->_id = $hit['_id'];
-            foreach ($hit['_source'] as $key => $value) {
-                $model->$key = $value;
-            }
+            $this->assignModelVariable($hit['_source'], $model);
             if (isset($hit['highlight'])) {
                 $model->_highlight = $hit['highlight'];
             }
             array_push($model_array, $model);
         }
         return $model_array;
+    }
+
+    public function assignModelVariable($array, $obj = null)
+    {
+        if ($obj == null) {
+            $obj = new \stdClass();
+        }
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $obj->$key = $this->assignModelVariable($value);
+            } else {
+                $obj->$key = $value;
+            }
+        }
+        return $obj;
     }
 
     /**
