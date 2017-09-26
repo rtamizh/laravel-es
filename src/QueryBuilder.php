@@ -308,6 +308,9 @@ class QueryBuilder
             if (array_key_exists('script', $bool)) {
                 $this->query['body']['query']['bool'][$bool['type']][] = $bool['script'];
             }
+            if (array_key_exists('bool', $bool)) {
+                $this->query['body']['query']['bool'][$bool['type']][] = array('bool' => $bool['bool']);
+            }
         }
         if (!empty($this->aggs)) {
             $this->query['body']['aggs'] = $this->aggs;
