@@ -216,9 +216,9 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     Log::match('field', 'text')->paginate($perPage, $page)
     ```
     Note - This can be used in the space of first 10000 result set for the current query. So if you intend to use the whole result set, then the better option is to use the scroller.
-23. searchRaw - To search by the raw array query
+23. search or searchRaw - To search by the raw array query
     ```
-    Log::searchRaw([
+    Log::search([
         'body'=>[
             "query"=>[
                 "match" => [
@@ -226,7 +226,7 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
                 ]
             ]
         ]
-    ])
+    ])->get()
     ```
     Note - For query format check the official documentation elasticsearch PHP package
 

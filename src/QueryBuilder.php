@@ -301,6 +301,12 @@ class QueryBuilder
     public function searchRaw($array)
     {
         $array["body"]["index"] = $this->model->getIndex();
+        return $this->client->search($array);
+    }
+
+    public function search($array)
+    {
+        $array["body"]["index"] = $this->model->getIndex();
         return $this->getCollection($this->client->search($array));
     }
 
