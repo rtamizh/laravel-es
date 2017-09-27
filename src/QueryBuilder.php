@@ -298,6 +298,12 @@ class QueryBuilder
         return $this->client->search($this->compile());
     }
 
+    public function searchRaw($array)
+    {
+        $array["body"]["index"] = $this->model->getIndex();
+        return $this->getCollection($this->client->search($array));
+    }
+
     /**
      * Get the count of documents for the current query
      * @return int  Document count
