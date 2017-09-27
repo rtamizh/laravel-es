@@ -266,6 +266,14 @@ class QueryBuilder
         return $model_array;
     }
 
+    public static function isAssoc(array $arr)
+    {
+        if (array() === $arr) {
+            return false;
+        }
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
     public function assignModelVariable($array, $obj = null)
     {
         if ($obj == null) {
@@ -273,7 +281,7 @@ class QueryBuilder
         }
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $obj->$key = $this->assignModelVariable($value);
+                $obj->$key = $this->isAssoc($value) ? $this->assignModelVariable($value) : $value;
             } else {
                 $obj->$key = $value;
             }
