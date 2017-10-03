@@ -67,6 +67,17 @@ class AggregationClause
     }
 
     /**
+     * Term aggregation
+     * @return Tamizh\LaravelEs\AggregationClause
+     */
+    public function topHits()
+    {
+        $this->type = 'top_hits';
+        $this->aggs_array[$this->type] = [];
+        return $this;
+    }
+
+    /**
      * To get the distinct count of a field
      * @param  string $field Field Name
      * @return  Tamizh\LaravelEs\AggregationClause

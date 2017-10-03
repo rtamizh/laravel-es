@@ -229,6 +229,14 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ])->get()
     ```
     Note - For query format check the official documentation elasticsearch PHP package
+24. topHits - to get the top hits of a aggregation
+    ```
+    Log::aggs(function(){
+        $query->terms('user.id')-aggs(function(){
+            $query->topHits()->size(5);  // get top 5 hits of the user
+        }, 'hits');
+    }, 'users')
+    ```
 
 # Notes
 1. Following field names are reserved - _id, _type, _index, _highlight
