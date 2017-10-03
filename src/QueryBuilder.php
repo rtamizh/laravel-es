@@ -140,6 +140,21 @@ class QueryBuilder
     }
 
     /**
+     * Compile Constrint clause for multi_match
+     * @param  Tamizh\LaravelEs\ConstraintClause $constraint
+     * @return constraint array
+     */
+    public function compileMultiMatch($constraint)
+    {
+        $condition = array();
+        $condition['fields'] = $constraint->field;
+        $condition['query'] = $constraint->condition;
+        $condition['type'] = $constraint->search_clause_type;
+        return $condition;
+    }
+    
+
+    /**
      * Compile Constrint clause for match
      * @param  Tamizh\LaravelEs\ConstraintClause $constraint
      * @return constraint array

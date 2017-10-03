@@ -237,6 +237,10 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
         }, 'hits');
     }, 'users')
     ```
+25. multiMatch - To search on multiple fields
+    ```
+    Log::multiMatch(['user','error'], 'query', 'phrase_prefix');
+    ```
 
 # Notes
 1. Following field names are reserved - _id, _type, _index, _highlight

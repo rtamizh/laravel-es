@@ -25,6 +25,19 @@ trait ElasticQueryTrait
     }
 
     /**
+     * Add the multi_match constraint to constraints array
+     * @param  array $fields Name of the fields
+     * @param  string $text  Constraint string
+     * @param  string $type  Search type
+     * @return Tamizh\LaravelEs\QueryBuilder
+     */
+    public function multiMatch($field, $text, $type = "best_fields")
+    {
+        array_push($this->constraints, new ConstraintClause($this, 'multi_match', $field, $text, $type));
+        return $this;
+    }
+
+    /**
      * Add the match phrase constraint to constraints array
      * @param  string $field Name of the field
      * @param  string $text  Constraint string
