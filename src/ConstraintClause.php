@@ -30,7 +30,7 @@ class ConstraintClause extends QueryBuilder
      */
     protected $search_clause_type;
 
-    public function __construct($parentQuery, $type, $field, $condition, $search_clause_type)
+    public function __construct($parentQuery, $type, $field, $condition, $search_clause_type = "best_fields")
     {
         $this->type = $type;
         $this->field = $field;
