@@ -396,7 +396,7 @@ class QueryBuilder
         }
         if ($this->fromIndex) {
             $this->query['index'] = $this->fromIndex;
-        } else {
+        } elseif (isset($this->model) && $this->model) {
             $this->query["index"] = $this->model->getIndex();
         }
         return $this->query;
