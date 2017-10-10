@@ -264,4 +264,16 @@ trait ElasticQueryTrait
         array_push($this->constraints, new ConstraintClause($this, 'range', $field, ['gte'=>$min, 'lte'=>$max]));
         return $this;
     }
+
+    public function fromType($type)
+    {
+        $this->fromType = $type;
+        return $this;
+    }
+
+    public function fromIndex($index)
+    {
+        $this->fromIndex;
+        return $this;
+    }
 }

@@ -128,6 +128,18 @@ class QueryBuilder
     protected $query_string;
 
     /**
+     * search from a specific type functionality
+     * @var Tamizh\LaravelES\QueryStringClause
+     */
+    protected $fromType;
+
+    /**
+     * search from specific indices functionality
+     * @var Tamizh\LaravelES\QueryStringClause
+     */
+    protected $fromIndex;
+
+    /**
      * Initialize the query builder
      * @param Tamizh\LaravelEs\Elasticsearch  $model  Elasticsearch Model
      */
@@ -315,13 +327,11 @@ class QueryBuilder
 
     public function searchRaw($array)
     {
-        $array["index"] = $this->model->getIndex();
         return $this->client->search($array);
     }
 
     public function search($array)
     {
-        $array["index"] = $this->model->getIndex();
         return $this->getCollection($this->client->search($array));
     }
 
@@ -380,6 +390,14 @@ class QueryBuilder
         }
         if ($this->script) {
             $this->query['body']['query']['script']['script'] = $this->script;
+        }
+        if ($this->fromType) {
+            $this->query['type'] = $this->fromType;
+        }
+        if ($this->fromIndex) {
+            $this->query['index'] = $this->fromIndex;
+        } else {
+            $this->query["index"] = $this->model->getIndex();
         }
         return $this->query;
     }

@@ -241,6 +241,10 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
     Log::multiMatch(['user','error'], 'query', 'phrase_prefix');
     ```
+26. fromType - To search on specific type
+    ```
+    Log::match('field', 'text')->fromType('warinings')->get()
+    ```
 
 # Notes
 1. Following field names are reserved - _id, _type, _index, _highlight
