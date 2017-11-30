@@ -99,9 +99,11 @@ abstract class Elasticsearch
     {
         $params = [
             'index' => $this->_index,
-            'type' => $this->_type,
-            'id' => $this->_id
+            'type' => $this->_type
         ];
+        if ($this->_id) {
+            $params['id'] = $this->_id;
+        }
         foreach ($this as $key => $value) {
             if ($key != '_index' && $key != '_type' && $key != '_id' && $key != '_highlight') {
                 $params['body'][$key] = $value;
