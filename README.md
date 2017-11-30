@@ -3,9 +3,7 @@ The basic orm package for elasticsearch (search functionalities)
 
 # Installation 
 
-    ```
     composer require tamizh/laravel-es
-    ```
 
 or add the following line in composer.json line 
 
@@ -15,21 +13,17 @@ or add the following line in composer.json line
 
 Add the service provider to your config/app.php file:
 
-    ``` 
-    'providers'     => array(
+    'providers'     => [
         //...
         Tamizh\LaravelEs\ElasticsearchServiceProvider::class,
-    ), 
-    ```
+    ],
 
 Add the facade to your config/app.php file:
 
-    ``` 
-    'aliases' => array(
+    'aliases' => [
         //...
         'Elasticsearch' => Tamizh\LaravelEs\Elasticsearch::class,
-    ), 
-    ```
+    ],
 
 Publish config file using ``` php artisan vendor:publish ```
 
@@ -37,23 +31,21 @@ Modifiy the config/elasticsearch.php.
 
 Example
 
-    ```
     return [
       'hosts' => [
         env('ES_HOSTS', 'localhost:9200')
       ],
       'log_path' => 'storage/logs/',
     ];
-    ```
 
 Instead of extends the Model class in your models extend the Elasticsearch to use the following functions.
-    ```
+
     class Log extends Elasticsearch
     {
       public $_index = 'logs*';
       public $_type = 'log';
     }
-    ```
+
 
 # Available Functions
 
