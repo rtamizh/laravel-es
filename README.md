@@ -238,6 +238,11 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     Log::match('field', 'text')->fromType('warinings')->get()
     ```
 
+27. find - Find the document by its ID
+    ```
+    Log::find("AWAMbhhhXkO5BRWWZAw6");
+    ```
+
 # Notes
 1. Following field names are reserved - _id, _type, _index, _highlight
 

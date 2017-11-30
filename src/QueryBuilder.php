@@ -280,17 +280,28 @@ class QueryBuilder
     {
         $model_array = [];
         foreach ($result['hits']['hits'] as $hit) {
-            $model = new $this->model;
-            $model->_index = $hit['_index'];
-            $model->_type = $hit['_type'];
-            $model->_id = $hit['_id'];
-            $this->assignModelVariable($hit['_source'], $model);
-            if (isset($hit['highlight'])) {
-                $model->_highlight = $hit['highlight'];
-            }
+            $model = $this->generateModel($hit);
             array_push($model_array, $model);
         }
         return $model_array;
+    }
+
+    /**
+     * Generate Model based on the given hit
+     * @param  array  $hit  Single Raw result of current query
+     * @return  Object  model
+     */
+    protected function generateModel($hit)
+    {
+        $model = new $this->model;
+        $model->_index = $hit['_index'];
+        $model->_type = $hit['_type'];
+        $model->_id = $hit['_id'];
+        $this->assignModelVariable($hit['_source'], $model);
+        if (isset($hit['highlight'])) {
+            $model->_highlight = $hit['highlight'];
+        }
+        return $model;
     }
 
     public static function isAssoc(array $arr)
@@ -595,5 +606,23 @@ class QueryBuilder
     public function bulk($docs = [])
     {
         return $this->client->bulk($docs);
+    }
+
+    /**
+     * Find the document by its ID
+     * @param  string  $id  Document ID
+     * @return  Object
+     */
+    public function find($id)
+    {
+        $params = [
+            'index' => $this->model->_index,
+            'type' => $this->model->_type
+        ];
+        if ($id) {
+            $params['id'] = $id;
+            return $this->generateModel($this->client->get($params));
+        }
+        return null;
     }
 }
