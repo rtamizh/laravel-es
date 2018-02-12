@@ -2,10 +2,12 @@
 namespace Tamizh\LaravelEs;
 
 use Exception;
-use Tamizh\LaravelEs\Traits\ElasticQueryTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
+
+use Tamizh\LaravelEs\Traits\ElasticQueryTrait;
+use Tamizh\LaravelEs\Exceptions\CrudException;
 
 /**
 * Convert Elasticsearch model object query array
@@ -521,8 +523,8 @@ class QueryBuilder
      */
     public function update($doc = [], $id = null)
     {
-        $params['index'] = $this->model->getIndex();
-        $params['type'] = $this->model->getType();
+        $params = [];
+        $params = $this->setMetaData($id, $params);
         if ($this->model->_id != null || $id != null) {
             $params['id'] = $id ? $id : $this->model->_id;
         } else {
@@ -559,11 +561,8 @@ class QueryBuilder
      */
     public function index($doc = [], $id = null)
     {
-        $params['index'] = $this->model->getIndex();
-        $params['type'] = $this->model->getType();
-        if ($id) {
-            $params['id'] = $id;
-        }
+        $params = [];
+        $params = $this->setMetaData($id, $params);
         $params['body'] = $doc;
         $result = $this->client->index($params);
         if ($result['created'] == true) {
@@ -580,16 +579,44 @@ class QueryBuilder
     }
 
     /**
+     * Set meta data for document
+     * @param multiple $metaData Metadata or id of a document
+     * @param array $params   A document
+     */
+    public function setMetaData($metaData, $params)
+    {
+        if (is_array($metaData)) {
+            if (array_key_exists('id', $metaData)) {
+                $params['id'] = $metaData['id'];
+            }
+            if (array_key_exists('index', $metaData)) {
+                $params['index'] = $metaData['index'];
+            }
+            if (array_key_exists('type', $metaData)) {
+                $params['type'] = $metaData['type'];
+            }
+        } else {
+            $params['index'] = $this->model->getIndex();
+            $params['type'] = $this->model->getType();
+            if ($metaData) {
+                $params['id'] = $metaData;
+            }
+        }
+        if (strpos($params['index'], '*')) {
+            throw CrudException::indexWithSpecialCharaceters($params['index']);
+        }
+        return $params;
+    }
+
+    /**
      * Delete Document from ES
      * @param  string  $id  Document ID
      * @return  boolean
      */
     public function delete($id = null)
     {
-        $params = [
-            'index' => $this->model->_index,
-            'type' => $this->model->_type
-        ];
+        $params = [];
+        $params = $this->setMetaData($id, $params);
         if ($id != null || $this->model->_id != null) {
             $params['id'] = $id ? $id : $this->model->_id;
         } else {

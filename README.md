@@ -1,5 +1,5 @@
 # laravel-es
-The basic orm package for elasticsearch (search functionalities)
+The basic orm package for elasticsearch (search and CRUD functionalities) - for elasticsearch 5.0 and lesser versions
 
 # Installation 
 
