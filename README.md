@@ -99,6 +99,7 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     e) sum_bucket
     f) sum
     d) date_histogram (with interval option [default - month])
+    e) avg
 
 
 5. sort - Sort the query result

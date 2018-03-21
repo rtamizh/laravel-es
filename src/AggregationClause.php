@@ -137,6 +137,19 @@ class AggregationClause
     }
 
     /**
+     * Gives the avg value of a field
+     * @param  string $field Field Name
+     * @return  Tamizh\LaravelEs\AggregationClause
+     */
+    public function avg($field)
+    {
+        $this->field = $field;
+        $this->type = "avg";
+        $this->aggs_array[$this->type]['field'] = $this->field;
+        return $this;
+    }
+
+    /**
      * Size of the aggregation
      * @param  integer  $size  Size of the aggregation result
      * @return Tamizh\LaravelEs\AggregationClause
