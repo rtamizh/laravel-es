@@ -348,6 +348,18 @@ class QueryBuilder
         return $this->getCollection($this->client->search($array));
     }
 
+    public function updateByQuery()
+    {
+        $params = $this->compile();
+        // Normal script functionality moved to outside of query to update the documents by script
+        // TODO - script need to be seperated from normal flow and update by query flow
+        if (array_key_exists("script", $params['body']['query'])) {
+            $params['body']['script'] = $params['body']['query']['script']['script'];
+            unset($params['body']['query']['script']);
+        }
+        return $this->client->updateByQuery($params);
+    }
+
     /**
      * Get the count of documents for the current query
      * @return int  Document count
