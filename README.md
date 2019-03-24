@@ -243,6 +243,11 @@ Instead of extends the Model class in your models extend the Elasticsearch to us
     ```
     Log::find("AWAMbhhhXkO5BRWWZAw6");
     ```
+    
+28. updateByQuery (experimental) - Update the documents using query (Not production ready)
+    ```
+    Log::match('field', 'test')->script("doc['update_field'].value = update_value")->updateByQuery()
+    ```
 
 # Notes
 1. Following field names are reserved - _id, _type, _index, _highlight
